@@ -1,0 +1,37 @@
+GET http://[::1]:3001/api/persons
+
+###
+DELETE http://[::1]:3001/api/persons/1
+
+### add entry
+POST http://[::1]:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "number": "651321681",
+    "name": "Dean A."
+}
+
+### try to add entry without number
+POST http://[::1]:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Paul B."
+}
+
+### try to add entry without name
+POST http://[::1]:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "number": "6561321681"
+}
+### try to add duplicate
+POST http://[::1]:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "number": "651321681",
+    "name": "Dean A."
+}
