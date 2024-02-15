@@ -1,0 +1,1 @@
+The link to the fly.io - App is [https://fullstackopenp3ex.fly.dev/](https://fullstackopenp3ex.fly.dev/)
