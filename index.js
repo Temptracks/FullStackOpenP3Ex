@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -25,6 +26,18 @@ let persons = [
 ]
 
 app.use(express.json())
+
+morgan.token('body', (req, res) => {return JSON.stringify(req.body)})
+
+// Format for POST requests
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body', {
+    skip: function (req, res) {return req.method !== "POST"}
+}))
+
+//Format for all requests except POST
+app.use(morgan('tiny', {
+    skip: function (req, res) {return req.method === "POST"}
+}))
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World - HomePage</h1>')
@@ -64,9 +77,7 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
     const id = generateId()
     const body = request.body
-    console.log('body.name', body.name)
-    console.log('body.number', body.number)
-    console.log('persons.find(person => person.name === body.name', persons.find(person => person.name === body.name))
+    
 
     if(!body.name) {
         return response.status(400).json({
@@ -92,12 +103,6 @@ app.post('/api/persons', (request, response) => {
 
     response.json(persons)
 })
-
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({error: 'unknown endpoint'})
-}
-
-app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT)
